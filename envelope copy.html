@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Raleway', Arial, sans-serif;
+            background-color: #3B4049;
+        }
+
+        .wrapper {
+            height: 400px;
+            width: 600px;
+            background-color: white;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            z-index: 0;
+            animation-delay: 5s;
+        }
+
+        .lid {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            border-right: 300px solid transparent;
+            border-bottom: 200px solid transparent;
+            border-left: 300px solid transparent;
+            transform-origin: top;
+            transition: transform 0.25s linear;
+        }
+
+        .lid.one {
+            border-top: 200px solid white;
+            transform: rotateX(0deg);
+            z-index: 4;
+            transition-delay: 0.75s;
+        }
+
+        .lid.two {
+            border-top: 200px solid white;
+            transform: rotateX(90deg);
+            z-index: 1;
+            transition-delay: 0.5s;
+        }
+
+        .envelope {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            border-top: 200px solid transparent;
+            border-right: 300px solid #eee;
+            border-bottom: 200px solid #ddd;
+            border-left: 300px solid #eee;
+            z-index: 4;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .cap {
+            position: absolute;
+            font-size: 80px;
+            top: 30px;
+            left: 30px;
+            font-family: 'Pinyon Script', cursive;
+        }
+
+        .photo {
+            position: absolute;
+            background-color: white;
+            border-radius: 10px;
+            z-index: 3;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            visibility: hidden;
+        }
+
+        .photo.landscape {
+            width: 600px;
+            height: 400px;
+        }
+
+        .photo.portrait {
+            top: -100px;
+            height: 600px;
+            width: 400px;
+            transform: rotate(-90deg);
+        }
+
+        .letter {
+            position: absolute;
+            top: -100px;
+            width: 400px;
+            height: 600px;
+            background-color: white;
+            border-radius: 10px;
+            z-index: 2;
+            transition: 0.5s;
+            padding: 60px 30px 30px 110px;
+            transform: rotate(-90deg);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .letter p {
+            font-size: 12px;
+            line-height: 18px;
+            color: #3B4049;
+            margin-bottom: 20px;
+        }
+
+        .wrapper.open .lid.one {
+            transform: rotateX(90deg);
+            transition-delay: 0s;
+        }
+
+        .wrapper.open .lid.two {
+            transform: rotateX(180deg);
+            transition-delay: 0.25s;
+        }
+
+        .wrapper.open .letter {
+            animation: pullOutLetter 2s ease-in-out;
+            animation-delay: 3s;
+            animation-fill-mode: forwards;
+        }
+
+        .wrapper.open .photo {
+            visibility: visible;
+        }
+
+        .wrapper.open .photo.portrait {
+            animation: pullOutPortraitPhoto 3s ease-in-out;
+            animation-delay: 1s;
+            animation-fill-mode: forwards;
+        }        
+
+        .wrapper.open .photo.landscape {
+            animation: pullOutLandscapePhoto 3s ease-in-out;
+            animation-delay: 1s;
+            animation-fill-mode: forwards;
+
+        }
+
+        @keyframes rotateEnvelope {
+            0% {
+                transform: rotateZ(0);
+            }
+            100% {
+                transform: rotateZ(45deg);
+            }
+        }        
+
+        @keyframes seeBackOfEnvelope {
+            0% {
+                transform: translateY(0) rotateY(-180deg);
+                z-index: 4;
+                visibility: visible;
+            }
+            100% {
+                transform: translateY(0) rotateY(0deg);
+                z-index: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes pullOutLetter {
+            0% {
+                transform: translateY(0) rotate(-90deg);
+                z-index: 2;
+            }
+            50% {
+                transform: translateY(-400px) rotate(-90deg);
+            }
+            100% {
+                transform: translateX(250px) rotate(0deg);
+                z-index: 4;
+            }
+        }
+
+        @keyframes pullOutPortraitPhoto {
+            0% {
+                transform: translateY(0) rotate(-90deg);
+                z-index: 3;
+            }
+            25% {
+                transform: translateY(-400px) rotate(-90deg);
+            }
+            75% {
+                transform: translateY(0);
+                z-index: 5;
+            }
+            100% {
+                transform: translateX(-250px) rotate(0deg);
+                z-index: 5;
+            }
+        }
+
+        @keyframes pullOutLandscapePhoto {
+            0% {
+                transform: translateY(0);
+                z-index: 3;
+                visibility: visible;
+            }
+            25% {
+                transform: translateY(-400px);
+            }
+            75% {
+                transform: translateY(0);
+                z-index: 5;
+            }
+            100% {
+                transform: translateX(-300px);
+                z-index: 5;
+            }
+        }
+    </style>
+
+    <script>
+        function startAnimation() {
+            const wrapper = document.querySelector('.wrapper');
+            setTimeout(() => {
+                wrapper.classList.add('open');
+            }, 1000);
+        }
+
+        function createLetter(letterText) {
+            const letter = document.querySelector('.letter');
+            letter.innerHTML = letter.innerHTML + convertToParagraphs(letterText);
+
+            const firstP = document.querySelector('.letter > p');
+            const cap = document.querySelector('.cap');
+            
+            cap.innerHTML = firstP.innerHTML.charAt(0);
+            firstP.innerHTML = firstP.innerHTML.substring(1);
+        }
+
+        function createPhoto(photoUrl, orientation) {
+            const photo = document.querySelector('.photo');
+
+            photo.onload = function() {
+                photo.classList.add(orientation);
+                startAnimation();
+            };
+
+            photo.onerror = function() {
+                console.log('Failed to load the background image.');
+            };
+
+            photo.src = photoUrl;
+        }
+
+        function convertToParagraphs(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            const paragraphs = lines.map(line => `<p>${line}</p>`);
+            
+            return paragraphs.join('');
+        }
+
+        window.onmessage = (event) => {
+            createLetter(event.data.letter);
+            createPhoto(event.data.photo, event.data.orientation);
+        };
+
+        // For debugging.
+        document.addEventListener('keyup', function(event) {
+            if (event.code === 'Space') {
+                const letterText = `It was during our much-anticipated annual Christmas party, that tradition of ours that pays a playful tribute to your Swiss roots with our cheesy, comforting fondue. I can almost hear the yodellers in the distance, but maybe that's just the wine talking. Something about that warm, gooey goodness and the festive atmosphere always makes it a special night--fond memories melting together just like the cheese in our pot.
+
+We always have the best time, and it's no secret why. Your generosity is as flowing as the fancy wine and champagne you meticulously handpick for our friends as if they were royalty. It's not just about the drinks, but the care and thought that goes into every selection. It's part of what makes the night so memorable, every year.
+
+Your love for our friends and your dedication to these traditions make my heart full. Here's to more laughter, more melted Swiss cheese, and more of your fantastic wine and champagne selections. Thank you for making our home a place of celebration and warmth, where the best memories are made.`;
+
+                createLetter(letterText);
+
+                const photoUrl = 'friends.jpeg';
+                const orientation = 'landscape';
+                createPhoto(photoUrl, orientation);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="wrapper">
+      <div class="lid one"></div>
+      <div class="lid two"></div>
+      <div class="envelope"></div>
+      <img src="" class="photo" />
+      <div class="letter">
+        <div class="cap"></div>
+      </div>
+    </div>
+</body>
+</html>

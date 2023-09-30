@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            font-family: 'Raleway', Arial, sans-serif;
+        }
+
+        .container {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-repeat: repeat;
+            background-size: 800px 800px;
+            perspective: 1000px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(144, 93, 54, .5);
+            mix-blend-mode: multiply;
+            pointer-events: none;
+        }        
+
+        .wrapper {
+            height: 400px;
+            width: 600px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+            animation-delay: 5s;
+            transform-style: preserve-3d;
+            transition: transform 1.5s;
+            box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .front {
+            /* background-color: #d4d4d4;
+            background-image:
+                linear-gradient(to top, transparent, #ffffff 80%, rgba(255, 255, 255, 0.9)),
+                linear-gradient(to left, transparent, #ffffff 80%, rgba(255, 255, 255, 0.9)); */
+
+            background-position: -37px;
+            background-size: 640px 450px;
+            background-repeat: no-repeat;
+
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            transform: rotateY(0);
+            /* backface-visibility: hidden; */
+            border-radius: 4px;
+        }
+
+        .back {
+            /* background-image: url('front.png'); */
+            background-position: -37px;
+            background-size: 640px 450px;
+            background-repeat: no-repeat;
+
+            /* background-color: #d4d4d4;
+            background-image:
+                linear-gradient(to top, transparent, #ffffff 80%, rgba(255, 255, 255, 0.9)),
+                linear-gradient(to left, transparent, #ffffff 80%, rgba(255, 255, 255, 0.9));
+            position: absolute; */
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            border-radius: 4px;
+        }
+
+        .envelope {
+            background-position: 0 -10px;
+            background-size: 600px 450px;
+            background-repeat: no-repeat;
+
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+
+            z-index: 4;
+        }
+
+        .lid {
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+
+            position: absolute;
+            top: -250px;
+            left: 0;
+
+            height: 250px;
+            width: 100%;
+            transform: rotateX(-180deg);
+            
+            transform-origin: bottom;
+            
+            z-index: 5;
+        }
+
+        .cap {
+            position: absolute;
+            font-size: 80px;
+            top: 30px;
+            left: 30px;
+            font-family: 'Pinyon Script', cursive;
+        }
+
+        .photo {
+            position: absolute;
+            background-color: white;
+            border-radius: 5px;
+            z-index: 2;
+            object-fit: cover;
+        }
+
+        .photo.landscape {
+            width: 600px;
+            height: 400px;
+        }
+
+        .photo.portrait {
+            top: -100px;
+            left: 100px;
+            height: 600px;
+            width: 400px;
+            transform: rotate(-90deg);
+        }
+
+        .letter {
+            position: absolute;
+            top: -100px;
+            left: 100px;
+            width: 400px;
+            height: 600px;
+            background-color: white;
+            border-radius: 5px;
+            transition: 0.5s;
+            padding: 60px 30px 30px 110px;
+            transform: rotate(-90deg);
+            z-index: 2;
+        }
+
+        .letter p {
+            font-size: 12px;
+            line-height: 18px;
+            color: #3B4049;
+            margin-bottom: 20px;
+        }
+
+        .wrapper.flip {
+            transform: rotateY(180deg);
+        }
+
+        .wrapper.open .lid {
+            animation: openLid 2s ease-in-out;
+            animation-fill-mode: forwards;            
+        }
+
+        .wrapper.open .letter {
+            animation: pullOutLetter 2s ease-in-out;
+            animation-delay: 3s;
+            animation-fill-mode: forwards;
+        }
+
+        .wrapper.open .photo.portrait {
+            animation: pullOutPortraitPhoto 3s ease-in-out;
+            animation-delay: 1.5s;
+            animation-fill-mode: forwards;
+        }        
+
+        .wrapper.open .photo.landscape {
+            animation: pullOutLandscapePhoto 3s ease-in-out;
+            animation-delay: 1.5s;
+            animation-fill-mode: forwards;
+
+        }
+
+        @keyframes openLid {
+            0% {
+                transform: translateY(0) rotateX(-180deg);
+            }
+            50% {
+                transform: translateY(0) rotateX(0);
+            }
+            100% {
+                transform: translateY(0) rotateX(0);
+                z-index: 1;
+            }
+        }   
+
+        @keyframes rotateEnvelope {
+            0% {
+                transform: rotateZ(0);
+            }
+            100% {
+                transform: rotateZ(45deg);
+            }
+        }        
+
+        @keyframes seeBackOfEnvelope {
+            0% {
+                transform: translateY(0) rotateY(180deg);
+            }
+            100% {
+                transform: translateY(0) rotateY(0deg);
+            }
+        }
+
+        @keyframes pullOutLetter {
+            0% {
+                transform: translateY(0) rotate(-90deg);
+            }
+            50% {
+                transform: translateY(-400px) rotate(-90deg);
+            }
+            100% {
+                transform: translateX(250px) rotate(0deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;
+            }
+        }
+
+        @keyframes pullOutPortraitPhoto {
+            0% {
+                transform: translateY(0) rotate(-90deg);
+            }
+            25% {
+                transform: translateY(-420px) rotate(-90deg);
+            }
+            50% {
+                z-index: 6;
+            }
+            75% {
+                transform: translateY(0);
+                z-index: 6;
+            }
+            100% {
+                transform: translateX(-250px) rotate(0deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;
+            }
+        }
+
+        @keyframes pullOutLandscapePhoto {
+            0% {
+                transform: translateY(0);
+            }
+            25% {
+                transform: translateY(-400px);
+            }
+            50% {
+                z-index: 6;
+            }
+            75% {
+                transform: translateY(0);
+                z-index: 6;
+            }
+            100% {
+                transform: translateX(-300px);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;
+            }
+        }
+    </style>
+
+    <script>
+        function startAnimation() {
+            const wrapper = document.querySelector('.wrapper');
+            setTimeout(() => {
+                wrapper.classList.add('flip');
+            }, 1000);
+
+            setTimeout(() => {
+                wrapper.classList.add('open');
+            }, 3000);            
+        }
+
+        function setBackground(texture) {
+            document.querySelector('.container').style.backgroundImage = `url('${texture}')`;
+        }
+
+        function setEnvelopeTextures(front, back, lid) {
+            document.querySelector('.front').style.backgroundImage = `url('${front}')`;
+            document.querySelector('.envelope').style.backgroundImage = `url('${back}')`;
+            document.querySelector('.lid').style.backgroundImage = `url('${lid}')`;
+        }        
+
+        function createLetter(letterText) {
+            const letter = document.querySelector('.letter');
+            letter.innerHTML = letter.innerHTML + convertToParagraphs(letterText);
+
+            const firstP = document.querySelector('.letter > p');
+            const cap = document.querySelector('.cap');
+            
+            cap.innerHTML = firstP.innerHTML.charAt(0);
+            firstP.innerHTML = firstP.innerHTML.substring(1);
+        }
+
+        function createPhoto(photoUrl, orientation) {
+            const photo = document.querySelector('.photo');
+
+            photo.onload = function() {
+                photo.classList.add(orientation);
+                startAnimation();
+            };
+
+            photo.onerror = function() {
+                console.log('Failed to load the background image.');
+            };
+
+            photo.src = photoUrl;
+        }
+
+        function convertToParagraphs(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            const paragraphs = lines.map(line => `<p>${line}</p>`);
+            
+            return paragraphs.join('');
+        }
+
+        window.onmessage = (event) => {
+            setBackground(event.data.background);
+            setEnvelopeTextures(event.data.front, event.data.back, event.data.lid)
+            createLetter(event.data.letter);
+            createPhoto(event.data.photo, event.data.orientation);
+        };
+
+        // For debugging.
+        document.addEventListener('keyup', function(event) {
+            if (event.code === 'Space') {
+                const letterText = `It was during our much-anticipated annual Christmas party, that tradition of ours that pays a playful tribute to your Swiss roots with our cheesy, comforting fondue. I can almost hear the yodellers in the distance, but maybe that's just the wine talking. Something about that warm, gooey goodness and the festive atmosphere always makes it a special night--fond memories melting together just like the cheese in our pot.
+
+We always have the best time, and it's no secret why. Your generosity is as flowing as the fancy wine and champagne you meticulously handpick for our friends as if they were royalty. It's not just about the drinks, but the care and thought that goes into every selection. It's part of what makes the night so memorable, every year.
+
+Your love for our friends and your dedication to these traditions make my heart full. Here's to more laughter, more melted Swiss cheese, and more of your fantastic wine and champagne selections. Thank you for making our home a place of celebration and warmth, where the best memories are made.`;
+                
+
+                setBackground('fabric3.jpeg');
+
+                setEnvelopeTextures('front.png', 'back.png', 'lid.png');
+
+                createLetter(letterText);
+
+                const photoUrl = 'friends.jpeg';
+                const orientation = 'landscape';
+                createPhoto(photoUrl, orientation);
+
+                //startAnimation();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div class="front"></div>
+            <div class="back">
+                <div class="letter">
+                    <div class="cap"></div>
+                </div>
+                <img src="" class="photo" />
+                <div class="lid"></div>    
+                <div class="envelope"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

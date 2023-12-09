@@ -188,6 +188,11 @@
             .photo .uploadui > img {
                 width: 30px;
                 height: 30px;
+                display: block;
+                left: 50%;
+                transform: translateX(-50%);
+                position: relative;
+                margin-bottom: 10px;
             }
 
 
@@ -362,6 +367,16 @@
                     transform: translate(0, 206px) rotate(-90deg);
                 }
 
+                .photo .uploadui {
+                    font-size: 15px;
+                    display: block;
+                }
+
+                .photo .uploadui > img {
+                    width: 30px;
+                    height: 30px;
+                }
+
                 @keyframes pullOutNote {
                     0% {
                         transform: translate(0, 206px) rotate(-90deg);
@@ -436,13 +451,20 @@
 
             function createNote(noteText, noteClickable) {
                 const note = document.querySelector('.note');
-                note.innerHTML = note.innerHTML + convertToParagraphs(noteText);
+                note.innerHTML = '';
+                //const cap = document.createElement('div');
+                //cap.classList.add('cap');
+                //note.appendChild(cap);
+                //note.appendChild(convertToParagraphs(noteText));
+                note.innerHTML = '<div class="cap"></div>' + convertToParagraphs(noteText);
 
                 const firstP = document.querySelector('.note > p');
                 const cap = document.querySelector('.cap');
-                
-                cap.innerHTML = firstP.innerHTML.charAt(0);
-                firstP.innerHTML = firstP.innerHTML.substring(1);
+
+                if (cap) {
+                    cap.innerHTML = firstP.innerHTML.charAt(0);
+                    firstP.innerHTML = firstP.innerHTML.substring(1);
+                }
 
                 if (noteClickable === true) {
                     const note = document.querySelector('.note');
@@ -504,6 +526,8 @@
                 } else if (event.data.message === 'photo') {
                     setPhoto(event.data.photo);
                     hidePhotoUpload();
+                } else if (event.data.message === 'note') {
+                    createNote(event.data.note);
                 }
             };
 
@@ -538,9 +562,7 @@
             <div class="wrapper">
                 <div class="front"></div>
                 <div class="back">
-                    <div class="note">
-                        <div class="cap"></div>
-                    </div>
+                    <div class="note"></div>
                     <div class="photo">
                         <img src="" />
                         <div class="uploadui"><img src="" >Upload your photo</div>

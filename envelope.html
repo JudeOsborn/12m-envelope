@@ -25,7 +25,6 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
             perspective: 1000px;
             margin: 0;
         }
@@ -40,6 +39,7 @@
             transform-style: preserve-3d;
             transition: transform 1.5s;
             box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+            top: 80px;
         }
 
         .front {
@@ -54,12 +54,10 @@
             left: 0;
 
             transform: rotateY(0);
-            /* backface-visibility: hidden; */
             border-radius: 4px;
         }
 
         .back {
-            /* background-position: -37px; */
             background-size: 100%;
             background-repeat: no-repeat;
 
@@ -74,18 +72,14 @@
         }
 
         .envelope {
-            /* background-position: 0 -10px; */
             background-size: 100%;
             background-repeat: no-repeat;
-
             z-index: 3;
-
             position: absolute;
             height: 100%;
             width: 100%;
             top: 0;
             left: 0;
-            /* z-index: 4; */
         }
 
         .lid {
@@ -238,9 +232,9 @@
         }
 
         .wrapper.flip {
-            transform: rotateY(180deg);
+            animation: rotateEnvelope 2s ease-in-out;
+            animation-fill-mode: forwards;
         }
-
 
         .wrapper.read .note {
             animation: pullOutNote 2s ease-in-out;
@@ -262,10 +256,13 @@
 
         @keyframes rotateEnvelope {
             0% {
-                transform: rotateZ(0);
+                transform: translate(0, 0) rotateY(0);
+            }
+            50% {
+                transform: translate(0, 200px) rotateY(0);
             }
             100% {
-                transform: rotateZ(45deg);
+                transform: translate(0, 200px) rotateY(180deg);
             }
         }
 
@@ -277,7 +274,7 @@
                 transform: translate(0, -10px) rotate(-90deg);
             }
             100% {
-                transform: translate(350px, -100px  ) rotate(0deg);
+                transform: translate(350px, -180px  ) rotate(0deg);
                 box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                 z-index: 6;
             }     
@@ -291,7 +288,7 @@
                 transform: translate(0, -10px) rotate(-90deg);
             }
             100% {
-                transform: translate(-150px, -100px) rotate(-10deg);
+                transform: translate(-150px, -160px) rotate(-10deg);
                 box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                 z-index: 6;
             }
@@ -305,7 +302,7 @@
                 transform: translateY(-451px);
             }
             100% {
-                transform: translate(-300px, -100px) rotate(-10deg);
+                transform: translate(-300px, -160px) rotate(-10deg);
                 box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                 z-index: 6;
             }
@@ -315,6 +312,7 @@
             .wrapper {
                 width: 300px;
                 height: 206px;
+                top: 380px;
             }
 
             .lid {
@@ -376,6 +374,18 @@
                 height: 30px;
             }
 
+            @keyframes rotateEnvelope {
+                0% {
+                    transform: translate(0, 0) rotateY(0);
+                }
+                50% {
+                    transform: translate(0, 80px) rotateY(0);
+                }
+                100% {
+                    transform: translate(0, 80px) rotateY(180deg);
+                }
+            }
+    
             @keyframes pullOutNote {
                 0% {
                     transform: translate(0, 206px) rotate(-90deg);
@@ -384,7 +394,7 @@
                     transform: translate(0, -10px) rotate(-90deg);
                 }
                 100% {
-                    transform: translate(-5px, 170px) rotate(0deg) scale(1.5);
+                    transform: translate(-5px, 210px) rotate(0deg) scale(1.5);
                     box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                     z-index: 6;
                 }     
@@ -398,7 +408,7 @@
                     transform: translate(0, -10px) rotate(-90deg);
                 }
                 100% {
-                    transform: translate(20px, -120px) rotate(-10deg);
+                    transform: translate(20px, -70px) rotate(-10deg);
                     box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                     z-index: 6;
                 }
@@ -412,7 +422,7 @@
                     transform: translateY(-226px);
                 }
                 100% {
-                    transform: translate(0, -50px) rotate(-10deg);
+                    transform: translate(0, 0) rotate(-10deg);
                     box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                     z-index: 6;
                     

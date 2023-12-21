@@ -523,6 +523,11 @@
                     setEnvelopeTextures(event.data.front, event.data.back, event.data.lidFront, event.data.lidBack)
                     createNote(event.data.note, event.data.clickNote);
                     createPhoto(event.data.photo, event.data.orientation, event.data.clickPhoto, event.data.uploadIcon);
+                } else if (event.data.message === 'view') {
+                    setEnvelopeTextures(event.data.front, event.data.back, event.data.lidFront, event.data.lidBack)
+                    createNote(event.data.note, event.data.clickNote);
+                    createPhoto(event.data.photo, event.data.orientation, event.data.clickPhoto, event.data.uploadIcon);
+                    hidePhotoUpload();
                 } else if (event.data.message === 'photo') {
                     setPhoto(event.data.photo);
                     hidePhotoUpload();

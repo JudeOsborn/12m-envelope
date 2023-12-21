@@ -151,9 +151,11 @@
         .cap {
             position: absolute;
             font-size: 80px;
-            top: 30px;
-            left: 30px;
+            top: 25px;
+            right: 350px;
             font-family: 'Pinyon Script', cursive;
+            width: 75px;
+            text-align: right;
         }
 
         .photo {
@@ -254,12 +256,17 @@
             animation-fill-mode: forwards;
         }
 
+        .wrapper.read .photo.landscape-transition {
+            animation: transitionToLandscapePhoto 2s ease-in-out;
+            animation-fill-mode: forwards;
+        }
+
         @keyframes rotateEnvelope {
             0% {
                 transform: translate(0, 0) rotateY(0);
             }
             50% {
-                transform: translate(0, 200px) rotateY(0);
+                transform: translate(0, 0) rotateY(180deg);
             }
             100% {
                 transform: translate(0, 200px) rotateY(180deg);
@@ -307,6 +314,35 @@
                 z-index: 6;
             }
         }
+
+        @keyframes transitionToLandscapePhoto {
+            0% {
+                width: 640px;
+                height: 441px;
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;                
+            }
+            100% {
+                width: 640px;
+                height: 441px;
+                transform: translate(-332px, -102px) rotate(-10deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;                
+            }
+        }
+
+        /*@keyframes transitionToLandscapePhoto {
+            0% {
+                transform: translate(-150px, -160px) rotate(-10deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;
+            }
+            100% {
+                transform: translate(-260px, 340px) rotate(-100deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;
+            }
+        }*/
 
         @media (max-width: 768px) {
             .wrapper {
@@ -526,6 +562,11 @@
             return paragraphs.join('');
         }
 
+        function changeToLandscape() {
+            const photo = document.querySelector('.photo');
+            photo.classList.add('landscape-transition');
+        }
+
         window.onmessage = (event) => {
             if (event.data.message === 'start') {
                 //setBackground(event.data.background);
@@ -561,6 +602,8 @@ Your love for our friends and your dedication to these traditions make my heart 
                 const photoClickable = true;
                 const uploadIcon = 'upload.svg';
                 createPhoto(photoUrl, orientation, photoClickable, uploadIcon);
+            } else if (event.key === 's') {
+                changeToLandscape();
             }
         });
     </script>

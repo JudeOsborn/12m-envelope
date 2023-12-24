@@ -248,7 +248,7 @@
             animation: pullOutPortraitPhoto 2s ease-in-out;
             animation-delay: 1.5s;
             animation-fill-mode: forwards;
-        }        
+        }
 
         .wrapper.read .photo.landscape {
             animation: pullOutLandscapePhoto 2s ease-in-out;
@@ -256,9 +256,50 @@
             animation-fill-mode: forwards;
         }
 
-        .wrapper.read .photo.landscape-transition {
-            animation: transitionToLandscapePhoto 2s ease-in-out;
+        .wrapper.read .photo.portrait-transition {
+            width: 441px;
+            height: 640px;
+            transform: translate(-150px, -160px) rotate(-10deg);
+            box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+            z-index: 6;
+            animation: fadeOutAndIn 1s ease-in-out;
             animation-fill-mode: forwards;
+        }
+
+        .wrapper.read .photo.landscape-transition {
+            width: 640px;
+            height: 441px;
+            transform: translate(-300px, -160px) rotate(-10deg);
+            box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+            z-index: 6;
+        }
+
+        .fade-out {
+            transition: opacity 1s;
+            opacity: 0;
+        }
+        
+        .fade-in {
+            transition: opacity 1s;
+            opacity: 1;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         @keyframes rotateEnvelope {
@@ -312,22 +353,6 @@
                 transform: translate(-300px, -160px) rotate(-10deg);
                 box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                 z-index: 6;
-            }
-        }
-
-        @keyframes transitionToLandscapePhoto {
-            0% {
-                width: 640px;
-                height: 441px;
-                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
-                z-index: 6;                
-            }
-            100% {
-                width: 640px;
-                height: 441px;
-                transform: translate(-332px, -102px) rotate(-10deg);
-                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
-                z-index: 6;                
             }
         }
 
@@ -461,13 +486,12 @@
                     transform: translate(0, 0) rotate(-10deg);
                     box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
                     z-index: 6;
-                    
                 }
             }            
     </style>
 
     <script>
-        function startAnimation() {
+        function startOpenAnimation() {
             const wrapper = document.querySelector('.wrapper');
             setTimeout(() => {
                 wrapper.classList.add('flip');
@@ -480,7 +504,7 @@
 
             setTimeout(() => {
                 wrapper.classList.add('read');
-            }, 3000);            
+            }, 3000);
         }
 
         function setBackground(texture) {
@@ -526,7 +550,7 @@
             photoImg.onload = function() {
                 const photo = document.querySelector('.photo');
                 photo.classList.add(orientation);
-                startAnimation();
+                startOpenAnimation();
             };
 
             photoImg.onerror = function() {
@@ -551,6 +575,27 @@
             photoImg.src = photoUrl;
         }
 
+        function animatePhotoTransition(orientation) {
+            console.log(orientation);
+            const photo = document.querySelector('.photo');
+            
+            setTimeout(() => {
+                photo.classList.remove('fade-out');
+                photo.classList.add('fade-in');
+
+                photo.classList.remove('portrait');
+                photo.classList.remove('landscape');
+                photo.classList.remove('portrait-transition');
+                photo.classList.remove('landscape-transition');
+    
+                photo.classList.add(`${orientation}-transition`);    
+            }, 1000);
+
+            setTimeout(() => {
+                photo.classList.remove('fade-in');
+            }, 2000);        
+        }
+
         function hidePhotoUpload() {
             document.querySelector('.photo .uploadui').style.display = 'none';
         }
@@ -562,11 +607,6 @@
             return paragraphs.join('');
         }
 
-        function changeToLandscape() {
-            const photo = document.querySelector('.photo');
-            photo.classList.add('landscape-transition');
-        }
-
         window.onmessage = (event) => {
             if (event.data.message === 'start') {
                 //setBackground(event.data.background);
@@ -576,6 +616,15 @@
             } else if (event.data.message === 'photo') {
                 setPhoto(event.data.photo);
                 hidePhotoUpload();
+            } else if (event.data.message === 'photo-transition') {
+                const photoImg = document.querySelector('.photo > img');
+                const photo = document.querySelector('.photo');            
+                photo.classList.add('fade-out');
+                photoImg.onload = function() {
+                    animatePhotoTransition(event.data.orientation);
+                }    
+                setPhoto(event.data.photo);
+                hidePhotoUpload();
             } else if (event.data.message === 'note') {
                 createNote(event.data.note);
             }
@@ -583,6 +632,8 @@
 
         // For debugging.
         document.addEventListener('keyup', function(event) {
+            const photoUrl = 'friends.jpeg';
+
             if (event.code === 'Space') {
                 const noteText = `It was during our much-anticipated annual Christmas party, that tradition of ours that pays a playful tribute to your Swiss roots with our cheesy, comforting fondue. I can almost hear the yodellers in the distance, but maybe that's just the wine talking. Something about that warm, gooey goodness and the festive atmosphere always makes it a special night--fond memories melting together just like the cheese in our pot.
 
@@ -597,13 +648,28 @@ Your love for our friends and your dedication to these traditions make my heart 
                 const letterClickable = true;
                 createNote(noteText, letterClickable);
 
-                const photoUrl = 'friends.jpeg';
-                const orientation = 'portrait';
+                const orientation = 'landscape';
                 const photoClickable = true;
                 const uploadIcon = 'upload.svg';
                 createPhoto(photoUrl, orientation, photoClickable, uploadIcon);
-            } else if (event.key === 's') {
-                changeToLandscape();
+            } else if (event.key === 'l') {
+                const photoImg = document.querySelector('.photo > img');
+                const photo = document.querySelector('.photo');            
+                photo.classList.add('fade-out');
+                photoImg.onload = function() {
+                    animatePhotoTransition('landscape');
+                }
+                setPhoto(photoUrl);
+                hidePhotoUpload();
+            } else if (event.key === 'p') {
+                const photoImg = document.querySelector('.photo > img');
+                const photo = document.querySelector('.photo');            
+                photo.classList.add('fade-out');
+                photoImg.onload = function() {
+                    animatePhotoTransition('portrait');                
+                }
+                setPhoto(photoUrl);
+                hidePhotoUpload();
             }
         });
     </script>

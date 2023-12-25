@@ -405,7 +405,7 @@
                 position: absolute;
                 font-size: 40px;
                 top: 15px;
-                left: 15px;
+                right: 165px;
                 font-family: 'Pinyon Script', cursive;
             }
 
@@ -423,6 +423,22 @@
                 height: 300px;
                 width: 206px;
                 transform: translate(0, 206px) rotate(-90deg);
+            }
+
+            .wrapper.read .photo.landscape-transition {
+                width: 300px;
+                height: 206px;
+                transform: translate(0, 0) rotate(-10deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;                
+            }
+
+            .wrapper.read .photo.portrait-transition {
+                height: 300px;
+                width: 206px;
+                transform: translate(50px, -80px) rotate(-10deg);
+                box-shadow: 12px 12px 18px rgba(0, 0, 0, 0.2);
+                z-index: 6;
             }
 
             .photo .uploadui {

@@ -171,6 +171,7 @@
         }
 
         .photo .uploadui {
+            display: none;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -444,7 +445,7 @@
 
             .photo .uploadui {
                 font-size: 12px;
-                display: block;
+                display: none;
             }
 
             .photo .uploadui > img {
@@ -577,6 +578,9 @@
             photoImg.src = photoUrl;
 
             if (photoClickable === true) {
+                const uploadUi = document.querySelector('.photo .uploadui');
+                uploadUi.style = 'display: block';
+                
                 const photo = document.querySelector('.photo');
                 photo.classList.add('clickable');
                 photo.addEventListener('click', () => {

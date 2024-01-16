@@ -562,7 +562,7 @@
             }
         }
 
-        function createPhoto(photoUrl, orientation, photoClickable, uploadIcon) {
+        function createPhoto(photoUrl, orientation, photoClickable, uploadIcon, photoUploadIcon) {
             const photoImg = document.querySelector('.photo > img');
 
             photoImg.onload = function() {
@@ -578,8 +578,11 @@
             photoImg.src = photoUrl;
 
             if (photoClickable === true) {
-                const uploadUi = document.querySelector('.photo .uploadui');
-                uploadUi.style = 'display: block';
+                
+                if (photoUploadIcon === true) {
+                    const uploadUi = document.querySelector('.photo .uploadui');
+                    uploadUi.style = 'display: block';
+                }
                 
                 const photo = document.querySelector('.photo');
                 photo.classList.add('clickable');
@@ -633,7 +636,13 @@
                 //setBackground(event.data.background);
                 setEnvelopeTextures(event.data.front, event.data.back, event.data.lidFront, event.data.lidBack)
                 createNote(event.data.note, event.data.clickNote);
-                createPhoto(event.data.photo, event.data.orientation, event.data.clickPhoto, event.data.uploadIcon);
+                createPhoto(
+                    event.data.photo, 
+                    event.data.orientation, 
+                    event.data.clickPhoto, 
+                    event.data.uploadIcon, 
+                    even.data.photoUploadIcon
+                );
             } else if (event.data.message === 'photo') {
                 setPhoto(event.data.photo);
                 hidePhotoUpload();
